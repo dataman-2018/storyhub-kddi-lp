@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KDDI × StoryHub — 共創ストーリーテリング基盤</title>
+<meta name="description" content="KDDIの事業共創を"伝わる資産"に変える。KDDI∞Labo × StoryHub 共創ストーリーテリング基盤のご提案。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1117;
+    --ink-2: #2d3748;
+    --ink-3: #718096;
+    --paper: #f7f8fa;
+    --paper-2: #eef0f4;
+    --paper-3: #dde1e8;
+    --orange: #e85d1a;
+    --orange-light: #fef3ed;
+    --orange-mid: #f07830;
+    --navy: #1a2744;
+    --blue: #2563a8;
+    --green: #2d8a64;
+    --gold: #a07830;
+    --rule: rgba(13,17,23,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Sans JP", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(247,248,250,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 52px;
+  }
+  .nav-logo {
+    font-family: "DM Serif Display", serif;
+    font-size: 17px; color: var(--ink);
+    letter-spacing: 0.01em; text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    font-size: 12px; color: var(--ink-3); text-decoration: none;
+    letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .page {
+    min-height: 100vh; padding: 100px 0 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 48px; width: 100%; }
+  .divider { width: 100%; height: 1px; background: var(--rule); margin: 0; }
+  .chap {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .chap::before { content: ""; display: block; width: 28px; height: 1px; background: var(--ink-3); }
+
+  /* Hero */
+  #hero {
+    background: var(--ink); color: var(--paper);
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 0 0 72px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(232,93,26,0.10), transparent 50%),
+      radial-gradient(ellipse at 20% 80%, rgba(37,99,168,0.06), transparent 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.02) 80px),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.02) 80px);
+  }
+  .hero-tag {
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(247,248,250,0.4); margin-bottom: 32px;
+  }
+  .hero-h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(34px, 5vw, 56px); line-height: 1.15;
+    color: var(--paper); max-width: 700px; margin-bottom: 28px;
+  }
+  .hero-h1 em { font-style: italic; color: var(--orange-mid); }
+  .hero-lead {
+    font-size: 14px; color: rgba(247,248,250,0.6);
+    max-width: 560px; line-height: 1.8;
+    border-left: 2px solid rgba(240,120,48,0.5); padding-left: 18px;
+  }
+  .hero-meta {
+    position: absolute; top: 52px; right: 48px; text-align: right;
+    font-size: 12px; color: rgba(247,248,250,0.35); letter-spacing: 0.04em;
+  }
+
+  /* Headings */
+  .s-heading {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(26px, 3.5vw, 38px); line-height: 1.25;
+    color: var(--ink); margin-bottom: 12px;
+  }
+  .s-heading em { font-style: italic; color: var(--orange); }
+  .s-lead {
+    font-size: 14px; color: var(--ink-2); max-width: 620px;
+    line-height: 1.85; margin-bottom: 44px;
+  }
+
+  /* Status */
+  #status { background: var(--paper); }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 44px; }
+  .stat-card { background: var(--paper-2); border: 1px solid var(--paper-3); border-radius: 4px; padding: 28px 24px; }
+  .stat-num { font-family: "DM Serif Display", serif; font-size: 38px; color: var(--ink); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em; }
+  .insight-box {
+    background: var(--orange-light); border-left: 3px solid var(--orange);
+    border-radius: 0 4px 4px 0; padding: 20px 24px;
+    font-size: 14px; color: #7a3510; line-height: 1.8;
+  }
+
+  /* Challenge */
+  #challenge { background: var(--paper-2); }
+  .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .c-card { background: var(--paper); border: 1px solid var(--paper-3); border-radius: 4px; padding: 28px 26px; }
+  .c-card-head { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .c-card-title { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 10px; line-height: 1.5; }
+  .c-card-body { font-size: 13px; color: var(--ink-2); line-height: 1.8; }
+
+  /* Value */
+  #value { background: var(--paper); }
+  .value-list { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--paper-3); border-radius: 4px; overflow: hidden; }
+  .v-row { display: grid; grid-template-columns: 48px 1fr 1.6fr; background: var(--paper-2); align-items: stretch; transition: background 0.2s; }
+  .v-row:hover { background: var(--paper); }
+  .v-num { display: flex; align-items: center; justify-content: center; font-family: "DM Serif Display", serif; font-size: 22px; color: var(--ink-3); border-right: 1px solid var(--paper-3); padding: 24px 0; }
+  .v-label { padding: 24px 24px 24px 20px; border-right: 1px solid var(--paper-3); display: flex; flex-direction: column; justify-content: center; }
+  .v-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .v-tag.orange { color: var(--orange); }
+  .v-tag.blue { color: var(--blue); }
+  .v-tag.green { color: var(--green); }
+  .v-title { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.5; }
+  .v-desc { padding: 24px; font-size: 13px; color: var(--ink-2); line-height: 1.85; display: flex; align-items: center; }
+  .value-outcome { margin-top: 32px; background: var(--ink); border-radius: 4px; padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .vo-item { text-align: center; }
+  .vo-label { font-size: 11px; color: rgba(247,248,250,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .vo-text { font-size: 13px; color: var(--paper); line-height: 1.6; }
+
+  /* Quality */
+  #quality { background: var(--paper-2); }
+  .quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .q-card { background: var(--paper); border: 1px solid var(--paper-3); border-left: 3px solid var(--orange); border-radius: 4px; padding: 28px 26px; }
+  .q-card h4 { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 10px; }
+  .q-card p { font-size: 13px; color: var(--ink-2); line-height: 1.8; }
+
+  /* Roadmap */
+  #roadmap { background: var(--paper); }
+  .rm-list { display: flex; flex-direction: column; gap: 16px; }
+  .rm-row { display: grid; grid-template-columns: 120px 1fr; border: 1px solid var(--paper-3); border-radius: 4px; overflow: hidden; }
+  .rm-phase { background: var(--paper-2); padding: 22px 20px; border-right: 1px solid var(--paper-3); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  .rm-ph-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .rm-ph-tag.p1 { color: var(--orange); }
+  .rm-ph-tag.p2 { color: var(--blue); }
+  .rm-ph-tag.p3 { color: var(--green); }
+  .rm-ph-name { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+  .rm-body { padding: 22px 26px; background: white; }
+  .rm-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .rm-desc { font-size: 13px; color: var(--ink-2); line-height: 1.8; }
+
+  /* Closing */
+  #closing { background: var(--ink); color: var(--paper); min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
+  #closing .chap { color: rgba(247,248,250,0.35); }
+  #closing .chap::before { background: rgba(247,248,250,0.35); }
+  .closing-q { font-family: "DM Serif Display", serif; font-size: clamp(20px, 3vw, 30px); line-height: 1.5; color: var(--paper); max-width: 680px; margin-bottom: 48px; }
+  .closing-q em { font-style: italic; color: var(--orange-mid); }
+  .next-steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .ns-card { padding: 20px 22px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; }
+  .ns-step { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,248,250,0.35); margin-bottom: 8px; }
+  .ns-name { font-size: 14px; font-weight: 500; color: var(--paper); }
+
+  footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-brand { font-family: "DM Serif Display", serif; font-size: 16px; color: rgba(247,248,250,0.5); }
+  .footer-meta { font-size: 12px; color: rgba(247,248,250,0.3); text-align: right; }
+
+  /* Ecosystem diagram */
+  .eco-diagram { margin: 32px 0 40px; }
+  .eco-layers { display: flex; flex-direction: column; gap: 0; }
+  .eco-layer {
+    display: flex; align-items: center; min-height: 52px;
+    border-bottom: 1px solid rgba(0,0,0,0.06); padding: 8px 0;
+  }
+  .eco-label {
+    width: 130px; flex-shrink: 0; font-size: 13px; font-weight: 700;
+    color: var(--ink); line-height: 1.4;
+  }
+  .eco-label small { display: block; font-weight: 400; color: var(--ink-3); font-size: 11px; }
+  .eco-content { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+  .eco-pill {
+    font-size: 12px; padding: 4px 12px; border-radius: 14px;
+    font-weight: 500; white-space: nowrap;
+  }
+  .eco-layer-storyhub {
+    border: 2.5px solid var(--orange); border-radius: 12px;
+    background: rgba(232,93,26,0.04); margin: 6px 0;
+    position: relative; padding: 10px 0 !important;
+  }
+  .eco-layer-storyhub::before {
+    content: 'StoryHub'; position: absolute; top: -10px; right: 14px;
+    font-size: 10px; font-weight: 700; color: #fff;
+    background: var(--orange); padding: 2px 10px; border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .eco-layer-storyhub .eco-label { color: var(--orange); }
+  .eco-layer-storyhub .eco-pill { background: rgba(232,93,26,0.1); color: #8b3610; font-weight: 600; }
+  .eco-layer-labo .eco-pill { background: #e0f0ff; color: #1a5276; }
+  .eco-layer-partners .eco-pill { background: #e8f5e9; color: #2e7d32; }
+  .eco-layer-startups .eco-pill { background: #fce4ec; color: #880e4f; }
+  .eco-layer-output .eco-pill { background: #f3e5f5; color: #6a1b9a; }
+  .eco-layer-kddi .eco-pill { background: #fff3e0; color: #e65100; border-radius: 4px; font-weight: 600; }
+
+  @media (max-width: 680px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .container { padding: 0 24px; }
+    .stat-grid, .challenge-grid, .next-steps, .value-outcome, .quality-grid { grid-template-columns: 1fr; }
+    .v-row { grid-template-columns: 1fr; }
+    .v-num { display: none; }
+    .rm-row { grid-template-columns: 1fr; }
+    .rm-phase { border-right: none; border-bottom: 1px solid var(--paper-3); }
+    .eco-layer { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .eco-label { width: auto; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="#">StoryHub</a>
+  <div class="nav-links">
+    <a href="#status">背景</a>
+    <a href="#challenge">課題</a>
+    <a href="#value">提供価値</a>
+    <a href="#roadmap">ロードマップ</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-meta">StoryHub株式会社<br>2026年5月</div>
+  <div class="container">
+    <p class="hero-tag">KDDI &times; StoryHub Partnership Proposal</p>
+    <h1 class="hero-h1">100の共創。<br>まだ、<em>語られていない。</em></h1>
+    <p class="hero-lead">
+      KDDI&#8734;Laboが生み出す共創の現場には、<br>
+      まだ十分に言語化されていない価値が眠っています。<br>
+      StoryHubは、その一次情報を集め、編集し、届け、<br>
+      反応から学ぶ仕組みで、KDDIの事業共創を<br>
+      継続的なストーリー資産へ変えます。
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="status" class="page">
+  <div class="container">
+    <p class="chap">Chapter 1 &mdash; KDDI&#8734;Laboの現在地</p>
+    <h2 class="s-heading">共創エコシステムは構築済み。<br>次の課題は<em>「共創の可視化」</em>。</h2>
+    <p class="s-lead">KDDI&#8734;Laboは、スタートアップと大企業をつなぐ日本最大級の事業共創プラットフォームとして、14年の実績を持ちます。出会いや連携機会の創出には長けている一方、そこから生まれる価値は十分に言語化・発信されていません。</p>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">100社+</div><div class="stat-label">大企業パートナー<br>事業共創に参画する企業群</div></div>
+      <div class="stat-card"><div class="stat-num">14年</div><div class="stat-label">KDDI&#8734;Labo運営実績<br>日本最大級のアクセラレーター</div></div>
+      <div class="stat-card"><div class="stat-num">500+</div><div class="stat-label">スタートアップ採択数<br>累計の共創案件・PoC数</div></div>
+    </div>
+    <div class="insight-box">
+      出会いの場としての価値は確立した。次のフェーズは、<strong>共創から生まれたストーリーを外に届け、次の共創を呼び込む好循環</strong>をつくること。StoryHubは、そのストーリー供給の仕組みを提供します。
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="challenge" class="page">
+  <div class="container">
+    <p class="chap">Chapter 2 &mdash; 構造的な課題</p>
+    <h2 class="s-heading">共創は生まれている。<br>しかし<em>語られずに埋もれている。</em></h2>
+    <p class="s-lead">KDDI&#8734;Laboの共創活動は量・質ともにトップクラス。しかし、その価値を継続的に発信し、蓄積し、社内外で活用する仕組みは整備されていないはずです。</p>
+    <div class="challenge-grid">
+      <div class="c-card">
+        <div class="c-card-head">Gap 01</div>
+        <div class="c-card-title">共創事例が「点」で終わる</div>
+        <div class="c-card-body">採択・PoC・事業化のプロセスで貴重なストーリーが生まれているが、イベント登壇やプレスリリースで消費された後、資産として蓄積・再活用される仕組みがない。</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-head">Gap 02</div>
+        <div class="c-card-title">パートナー企業に共創の温度が伝わりにくい</div>
+        <div class="c-card-body">100社超の大企業パートナーは、他社がどのような共創に取り組んでいるかを知る機会が限られている。テーマ別の事例が編集された形で届けば、参加意欲と共創の密度が上がる。</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-head">Gap 03</div>
+        <div class="c-card-title">社内ナレッジが分散している</div>
+        <div class="c-card-body">事業部ごとに「過去にどんなスタートアップと話したか」「PoCがなぜ進んだ/止まったか」が散らばりやすく、知見の横展開や次の判断に活かしきれていない。</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-head">Gap 04</div>
+        <div class="c-card-title">発信の型がなく、属人的になりやすい</div>
+        <div class="c-card-body">共創事例の取材・記事化・承認・配信のプロセスが標準化されておらず、担当者が変わるとコンテンツの質と量が不安定になる。持続的な発信には「運用の型」が必要。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="value" class="page">
+  <div class="container">
+    <p class="chap">Chapter 3 &mdash; StoryHubが提供する価値</p>
+    <h2 class="s-heading">共創は、<em>語られてはじめて資産になる。</em></h2>
+    <p class="s-lead">StoryHubは、KDDIの共創活動を「一次情報の収集 → コンテンツ化 → 配信 → 反応から学習」の一気通貫で支援します。単発の記事制作ではなく、共創の価値を継続的に発信・蓄積する仕組みそのものを実装します。</p>
+
+    <div class="eco-diagram">
+      <div class="eco-layers">
+        <div class="eco-layer eco-layer-output">
+          <div class="eco-label">配信先<small>（アウトプット）</small></div>
+          <div class="eco-content">
+            <span class="eco-pill">オウンドメディア</span>
+            <span class="eco-pill">SNS</span>
+            <span class="eco-pill">ニュースレター</span>
+            <span class="eco-pill">採用広報</span>
+            <span class="eco-pill">営業資料</span>
+            <span class="eco-pill">社内共有</span>
+          </div>
+        </div>
+        <div class="eco-layer eco-layer-storyhub">
+          <div class="eco-label">共創ストーリー<small>テリング基盤</small></div>
+          <div class="eco-content">
+            <span class="eco-pill">Interview</span>
+            <span class="eco-pill">Studio</span>
+            <span class="eco-pill">Feed</span>
+            <span class="eco-pill">Insight</span>
+            <span class="eco-pill">共創メモリー</span>
+          </div>
+        </div>
+        <div class="eco-layer eco-layer-labo">
+          <div class="eco-label">KDDI&#8734;Labo<small>（共創ハブ）</small></div>
+          <div class="eco-content">
+            <span class="eco-pill">ピッチイベント</span>
+            <span class="eco-pill">メンタリング</span>
+            <span class="eco-pill">PoC支援</span>
+            <span class="eco-pill">ビジネスマッチング</span>
+            <span class="eco-pill">共創プログラム</span>
+          </div>
+        </div>
+        <div class="eco-layer eco-layer-partners">
+          <div class="eco-label">パートナー<small>（大企業100社+）</small></div>
+          <div class="eco-content">
+            <span class="eco-pill">生成AI</span>
+            <span class="eco-pill">地域創生</span>
+            <span class="eco-pill">ヘルスケア</span>
+            <span class="eco-pill">金融</span>
+            <span class="eco-pill">モビリティ</span>
+            <span class="eco-pill">リテールDX</span>
+          </div>
+        </div>
+        <div class="eco-layer eco-layer-startups">
+          <div class="eco-label">スタートアップ<small>（採択企業500+）</small></div>
+          <div class="eco-content">
+            <span class="eco-pill">プレシード〜シリーズB</span>
+            <span class="eco-pill">テック系</span>
+            <span class="eco-pill">ディープテック</span>
+            <span class="eco-pill">SaaS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="value-list">
+      <div class="v-row">
+        <div class="v-num">1</div>
+        <div class="v-label">
+          <div class="v-tag orange">共創ストーリー化</div>
+          <div class="v-title">一次情報を集め、<br>伝わるコンテンツに変える</div>
+        </div>
+        <div class="v-desc">StoryHub Interviewでスタートアップ代表、KDDI事業部、パートナー企業の一次情報を構造的に収集。Studioで記事・対談・レポート・SNS投稿・営業資料に編集。AIがドラフトを生成し、編集者が仕上げるHuman in the Loop体制で、品質とスピードを両立します。</div>
+      </div>
+      <div class="v-row">
+        <div class="v-num">2</div>
+        <div class="v-label">
+          <div class="v-tag blue">共創テーマの可視化</div>
+          <div class="v-title">100社の関心テーマを<br>「読み物」として編集する</div>
+        </div>
+        <div class="v-desc">パートナー企業が関心を持つテーマ（生成AI、地域創生、ヘルスケア等）をStoryHub Insightで整理し、スタートアップとのマッチング可能性を「コンテンツ」として可視化。ピッチイベントに留まらない、共創テーマのメディア化を実現します。</div>
+      </div>
+      <div class="v-row">
+        <div class="v-num">3</div>
+        <div class="v-label">
+          <div class="v-tag green">共創メモリー</div>
+          <div class="v-title">面談・PoC・学びを<br>組織の記憶として蓄積する</div>
+        </div>
+        <div class="v-desc">スタートアップとの面談メモ、PoCの背景・成果・学び、パートナー企業の関心テーマ、過去の採択/不採択理由、イベント議事録——これらを「共創メモリー」として構造的に蓄積。事業部を横断して参照でき、次の共創の意思決定を加速します。</div>
+      </div>
+    </div>
+    <div class="value-outcome">
+      <div class="vo-item"><div class="vo-label">スタートアップにとって</div><div class="vo-text">KDDI&#8734;Laboの共創実績が<br>可視化され、応募意欲が向上</div></div>
+      <div class="vo-item"><div class="vo-label">パートナー企業にとって</div><div class="vo-text">他社の共創テーマが見え<br>参加密度と連携機会が増加</div></div>
+      <div class="vo-item"><div class="vo-label">KDDI（運用側）にとって</div><div class="vo-text">共創のナレッジが蓄積され<br>発信の型が持続的に回る</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="quality" class="page">
+  <div class="container">
+    <p class="chap">StoryHubの品質基盤</p>
+    <h2 class="s-heading">共創の価値を、<em>仕組み</em>で伝える。</h2>
+    <p class="s-lead">単なるコンテンツ制作代行ではありません。StoryHubプラットフォームの機能が、品質と持続性を構造的に担保します。</p>
+    <div class="quality-grid">
+      <div class="q-card">
+        <h4>ブランドメモリー</h4>
+        <p>KDDIのブランドガイドライン、過去コンテンツ、トーン＆マナーをAIが記憶。担当者が変わっても、発信の一貫性が保たれます。</p>
+      </div>
+      <div class="q-card">
+        <h4>AI × 人間編集</h4>
+        <p>AIがドラフトを高速生成し、編集経験者が仕上げるHuman in the Loop体制。朝日新聞社をはじめ150社超のメディア企業が採用する編集基準を適用。</p>
+      </div>
+      <div class="q-card">
+        <h4>運用の型化</h4>
+        <p>取材設計→インタビュー→記事化→承認→配信→反応分析の運用フローを標準化。月次・四半期のリズムで、属人的にならない発信体制を構築します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="roadmap" class="page">
+  <div class="container">
+    <p class="chap">Chapter 4 &mdash; ロードマップ</p>
+    <h2 class="s-heading">まず<em>5つの共創ストーリー</em>から始める。</h2>
+    <p class="s-lead">小さく始めて価値を証明し、段階的に共創コンテンツ基盤へ拡張します。</p>
+    <div class="rm-list">
+      <div class="rm-row">
+        <div class="rm-phase">
+          <div class="rm-ph-tag p1">Phase 1</div>
+          <div class="rm-ph-name">共創ストーリー<br>制作PoC</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">代表的な共創案件を取材し、コンテンツ化する</div>
+          <div class="rm-desc">KDDI&#8734;Laboの中から代表的な共創案件を選定。スタートアップ代表とKDDI担当者へのインタビューから、記事・対談コンテンツ・SNS投稿を制作。KDDI&#8734;Laboの魅力を社外に発信し、スタートアップ・大企業パートナー双方の参加意欲を高めます。</div>
+        </div>
+      </div>
+      <div class="rm-row">
+        <div class="rm-phase">
+          <div class="rm-ph-tag p2">Phase 2</div>
+          <div class="rm-ph-name">共創コンテンツ<br>運用の型化</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">月次の共創コンテンツ運用を設計・定着させる</div>
+          <div class="rm-desc">共創案件・イベント・パートナー企業の関心テーマを月次でコンテンツ化する運用を設計。属人的な広報から脱却し、活動量に比例してコンテンツ資産が増える仕組みへ。社内共有・営業連携・採用広報にも二次利用可能な形で資産化します。</div>
+        </div>
+      </div>
+      <div class="rm-row">
+        <div class="rm-phase">
+          <div class="rm-ph-tag p3">Phase 3</div>
+          <div class="rm-ph-name">共創メディア /<br>共創フィード化</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">共創に関心のある人へ、最適な情報を届けるフィード</div>
+          <div class="rm-desc">StoryHub Feedを活用し、KDDIのオウンドメディア、アプリ、パートナー向けポータルに共創関連コンテンツを配信。スタートアップ・技術トレンド・共創事例を、関心層ごとに最適化して届ける「共創フィード」へ進化させます。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="closing" class="page">
+  <div class="container">
+    <p class="chap">Next Step</p>
+    <div class="closing-q">
+      共創は、<em>語られてはじめて資産になる。</em><br><br>
+      KDDI&#8734;Laboが毎年生み出す共創の価値を、<br>
+      埋もれさせず、伝わる資産に変える。<br>
+      StoryHubは、そのストーリーテリング基盤を<br>
+      ご一緒に構築したいと考えています。
+    </div>
+    <div class="next-steps">
+      <div class="ns-card">
+        <div class="ns-step">Step 1</div>
+        <div class="ns-name">課題ヒアリング<br><small style="font-size:12px;color:rgba(247,248,250,0.5)">発信・ナレッジ化における課題感の共有</small></div>
+      </div>
+      <div class="ns-card">
+        <div class="ns-step">Step 2</div>
+        <div class="ns-name">PoC設計<br><small style="font-size:12px;color:rgba(247,248,250,0.5)">対象案件・アウトプット形式の合意</small></div>
+      </div>
+      <div class="ns-card">
+        <div class="ns-step">Step 3</div>
+        <div class="ns-name">共創ストーリー制作開始<br><small style="font-size:12px;color:rgba(247,248,250,0.5)">取材→コンテンツ化→配信</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">StoryHub</div>
+  <div class="footer-meta">Confidential &mdash; Prepared for KDDI Corporation<br>May 2026</div>
+</footer>
+</body>
+</html>

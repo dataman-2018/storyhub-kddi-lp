@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "cookie", "key": "sh_auth" }],
+      "destination": "/_content/$1"
+    },
+    {
+      "source": "/(.*)",
+      "missing": [{ "type": "cookie", "key": "sh_auth" }],
+      "destination": "/api/gate"
+    }
+  ]
+}
